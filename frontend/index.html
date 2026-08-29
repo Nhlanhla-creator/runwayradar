@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RunwayRadar — agentic finance copilot</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>RunwayRadar</h1>
+    <p class="tagline">An agent that reads your money, not just a dashboard that shows it.</p>
+  </header>
+
+  <main>
+    <section class="card" id="run-card">
+      <h2>Run the agent</h2>
+      <button id="run-button" type="button">Run the loop</button>
+      <span id="run-status" class="status" aria-live="polite"></span>
+    </section>
+
+    <section class="card" id="metrics-card" hidden>
+      <h2>Metrics</h2>
+      <p id="metrics-body">—</p>
+    </section>
+
+    <section class="card" id="trace-card" hidden>
+      <h2>Agent trace</h2>
+      <ol id="trace-list"></ol>
+    </section>
+
+    <section class="card" id="ask-card" hidden>
+      <h2>Ask about your finances</h2>
+      <form id="ask-form">
+        <input id="ask-input" type="text" placeholder="e.g. What is my burn rate?" />
+        <button type="submit">Ask</button>
+      </form>
+      <pre id="ask-answer"></pre>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
