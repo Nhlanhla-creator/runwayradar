@@ -10,6 +10,11 @@ venv/
 data/transactions.csv
 data/ground_truth.json
 
+# Examples are committed so the demo has variety out of the box
+!data/examples/
+!data/examples/*.csv
+
+
 # OS / editor
 .DS_Store
 Thumbs.db

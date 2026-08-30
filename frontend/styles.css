@@ -261,6 +261,16 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.example-select {
+  min-width: 150px;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.65rem;
+  font: 500 0.78rem var(--font);
+}
+.example-select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .loading {
   display: flex; align-items: center; gap: 0.8rem;

@@ -14,6 +14,7 @@ from . import pipeline, qa
 app = FastAPI(title="RunwayRadar", version="0.1.0")
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 # The dataset the loop currently runs on. None = the bundled sample CSV.
@@ -21,6 +22,9 @@ app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 # agree on which data is "current".
 _current_rows: list[dict] | None = None
 _current_source = "sample"
+
+
+EXAMPLES_DIR = DATA_DIR / "examples"
 
 
 def _decode_csv(contents: bytes) -> list[dict]:
@@ -38,6 +42,40 @@ def run() -> dict:
     result = pipeline.run_pipeline(_current_rows)
     result["source"] = _current_source
     return result
+
+
+@app.get("/api/examples")
+def examples() -> dict:
+    """List the bundled datasets available to explore."""
+    files = sorted(EXAMPLES_DIR.glob("*.csv")) if EXAMPLES_DIR.exists() else []
+    return {
+        "examples": [
+            {"id": f.name, "name": f.stem.replace("-", " ").title()}
+            for f in files
+        ]
+    }
+
+
+@app.post("/api/examples/{example_id}")
+def load_example(example_id: str) -> JSONResponse:
+    """Load one bundled example through the same path as an upload."""
+    global _current_rows, _current_source
+    if Path(example_id).name != example_id or not example_id.lower().endswith(".csv"):
+        return JSONResponse({"ok": False, "error": "invalid example name"}, status_code=400)
+    example_path = EXAMPLES_DIR / example_id
+    if not example_path.is_file():
+        return JSONResponse({"ok": False, "error": "example not found"}, status_code=404)
+    try:
+        with example_path.open(newline="", encoding="utf-8-sig") as f:
+            rows = list(csv.DictReader(f))
+        pipeline.validate_rows(rows)
+    except (OSError, ValueError) as exc:
+        return JSONResponse({"ok": False, "error": str(exc)}, status_code=400)
+    _current_rows = rows
+    _current_source = example_path.name
+    result = pipeline.run_pipeline(rows)
+    result["source"] = _current_source
+    return JSONResponse(result)
 
 
 @app.post("/api/upload")

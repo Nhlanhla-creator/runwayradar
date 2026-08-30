@@ -36,6 +36,7 @@ const els = {
   uploadButton: document.getElementById("upload-button"),
   fileInput: document.getElementById("file-input"),
   resetButton: document.getElementById("reset-button"),
+  exampleSelect: document.getElementById("example-select"),
   sourceChip: document.getElementById("source-chip"),
   loading: document.getElementById("loading"),
   loadingText: document.getElementById("loading-text"),
@@ -69,6 +70,9 @@ els.runButton.addEventListener("click", runLoop);
 els.uploadButton.addEventListener("click", () => els.fileInput.click());
 els.fileInput.addEventListener("change", uploadFile);
 els.resetButton.addEventListener("click", resetData);
+els.exampleSelect.addEventListener("change", () => {
+  if (els.exampleSelect.value) loadExample(els.exampleSelect.value);
+});
 els.askForm.addEventListener("submit", askQuestion);
 els.askChips.addEventListener("click", (e) => {
   const chip = e.target.closest(".chip");
@@ -76,6 +80,46 @@ els.askChips.addEventListener("click", (e) => {
   els.askInput.value = chip.dataset.q;
   askQuestion();
 });
+
+async function loadExamples() {
+  try {
+    const res = await fetch("/api/examples");
+    const data = await res.json();
+    for (const example of data.examples || []) {
+      const option = document.createElement("option");
+      option.value = example.id;
+      option.textContent = example.name;
+      els.exampleSelect.appendChild(option);
+    }
+  } catch (err) {
+    console.warn("Could not load examples", err);
+  }
+}
+
+async function loadExample(name) {
+  els.exampleSelect.disabled = true;
+  showLoading();
+  els.loadingText.textContent = "Reading " + name + "…";
+  try {
+    const res = await fetch("/api/examples/" + encodeURIComponent(name), { method: "POST" });
+    const data = await res.json();
+    if (!res.ok || !data.ok) {
+      els.dashSub.textContent = "Example failed: " + (data.error || "unknown error");
+      return;
+    }
+    els.sourceChip.textContent = data.source;
+    els.resetButton.hidden = false;
+    await revealTrace(data.trace);
+    render(data);
+  } catch (err) {
+    els.dashSub.textContent = "Example error: " + err.message;
+  } finally {
+    hideLoading();
+    els.exampleSelect.disabled = false;
+  }
+}
+
+loadExamples();
 
 // ---- Run the agent loop -----------------------------------------------------
 async function runLoop() {
