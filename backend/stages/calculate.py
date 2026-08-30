@@ -24,7 +24,7 @@ from ..trace import Trace
 
 # Assumed cash on hand, in dollars. The synthetic dataset contains only spend
 # records, so runway needs an external balance. This is the one number a user
-# would supply; it is a constant here for a reproducible demo.
+# would supply; it is a documented assumption here for reproducibility.
 STARTING_CASH = 50_000.00
 
 RUNWAY_LOOKBACK_MONTHS = 3
@@ -75,6 +75,15 @@ def calculate_metrics(trace: Trace, rows: list[dict], candidates: list[dict]) ->
     monthly_impact = recurring_impact + (oneoff_impact / 12.0)
     impact_fraction = monthly_impact / recent_monthly_burn if recent_monthly_burn > 0 else 0.0
 
+    # Category breakdown (for the dashboard donut chart).
+    category_totals: dict[str, float] = defaultdict(float)
+    for r in rows:
+        category_totals[r["category"]] += float(r["amount"])
+    category_totals = {
+        k: round(v, 2)
+        for k, v in sorted(category_totals.items(), key=lambda kv: -kv[1])
+    }
+
     metrics = {
         "months_covered": len(months),
         "total_spend": round(total_spend, 2),
@@ -89,6 +98,7 @@ def calculate_metrics(trace: Trace, rows: list[dict], candidates: list[dict]) ->
             "fraction_of_burn": round(impact_fraction, 4),
         },
         "monthly_burn": {m: round(t, 2) for m, t in monthly.items()},
+        "category_totals": category_totals,
     }
     action.finish(metrics)
     return metrics

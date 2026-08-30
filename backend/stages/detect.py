@@ -23,7 +23,7 @@ from statistics import median
 
 from ..trace import Trace
 
-# Tuning knobs, kept here so they are easy to find and justify in the demo.
+# Tuning knobs, kept here so they are easy to find and justify.
 PRICE_HIKE_RATIO = 1.5
 ONE_OFF_MEDIAN_MULTIPLE = 3.0
 SPIKE_RATIO = 2.5        # a category must jump 2.5x its baseline to be a spike
@@ -40,7 +40,7 @@ def _parse(rows: list[dict]) -> list[dict]:
             "vendor": r["vendor"],
             "category": r["category"],
             "amount": float(r["amount"]),
-            "recurring": r["recurring"].strip().lower() == "true",
+            "recurring": r.get("recurring", "false").strip().lower() == "true",
         })
     return parsed
 

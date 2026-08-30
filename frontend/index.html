@@ -4,40 +4,231 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RunwayRadar — agentic finance copilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <header>
-    <h1>RunwayRadar</h1>
-    <p class="tagline">An agent that reads your money, not just a dashboard that shows it.</p>
-  </header>
+  <!-- ============ LANDING VIEW ============ -->
+  <div id="view-landing" class="view">
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-mark"></span>
+        <span class="brand-name">RunwayRadar</span>
+      </div>
+      <div class="nav-links">
+        <a href="#how" class="nav-link">How it works</a>
+        <a href="#features" class="nav-link">Features</a>
+        <button id="nav-signin" class="btn btn-ghost">Sign in</button>
+        <button id="nav-cta" class="btn btn-primary">Get started</button>
+      </div>
+    </nav>
 
-  <main>
-    <section class="card" id="run-card">
-      <h2>Run the agent</h2>
-      <button id="run-button" type="button">Run the loop</button>
-      <span id="run-status" class="status" aria-live="polite"></span>
+    <section class="landing-hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Agentic finance copilot</span>
+          <h1>Your money,<br />read and acted on.</h1>
+          <p class="lede">
+            RunwayRadar ingests your bank exports, invoices, and subscriptions,
+            then works through them on its own — spotting the duplicate charges,
+            creeping SaaS, and spend spikes you'd never catch by hand.
+          </p>
+          <div class="hero-actions">
+            <button id="hero-cta" class="btn btn-primary btn-lg">See it work →</button>
+            <a href="#how" class="btn btn-ghost btn-lg">How it works</a>
+          </div>
+          <div class="hero-proof">
+            <div class="proof-stat"><strong>6</strong><span>agent steps</span></div>
+            <div class="proof-stat"><strong>7</strong><span>anomaly types</span></div>
+            <div class="proof-stat"><strong>0</strong><span>API keys needed</span></div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-card hero-card-main">
+            <div class="hero-card-title">Flagged for action</div>
+            <div class="hero-flag"><span class="dot dot-bad"></span><span>Notion price hike 4×</span><strong>$1,728/yr</strong></div>
+            <div class="hero-flag"><span class="dot dot-warn"></span><span>Duplicate AWS charge</span><strong>$513</strong></div>
+            <div class="hero-flag"><span class="dot dot-warn"></span><span>Lapsed Canva subscription</span><strong>$156/yr</strong></div>
+          </div>
+          <div class="hero-card hero-card-float">
+            <div class="hero-card-title">Runway</div>
+            <div class="hero-runway-num">1.9<span>mo</span></div>
+            <div class="hero-spark"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="card" id="metrics-card" hidden>
-      <h2>Metrics</h2>
-      <p id="metrics-body">—</p>
+    <section id="how" class="landing-section">
+      <h2>The agent loop, in the open</h2>
+      <p class="section-sub">Six inspectable steps. Not a black box, not a static report.</p>
+      <div class="loop-row">
+        <div class="loop-step"><span class="loop-num">1</span><strong>Read data</strong><p>CSVs, invoices, subscriptions.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><span class="loop-num">2</span><strong>Detect</strong><p>Duplicates, hikes, spikes, creep.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><span class="loop-num">3</span><strong>Investigate</strong><p>Vendor history &amp; baseline.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><span class="loop-num">4</span><strong>Calculate</strong><p>Burn rate &amp; runway.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><span class="loop-num">5</span><strong>Recommend</strong><p>Prioritized by impact.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><span class="loop-num">6</span><strong>Flag</strong><p>Top issues for action.</p></div>
+      </div>
     </section>
 
-    <section class="card" id="trace-card" hidden>
-      <h2>Agent trace</h2>
-      <ol id="trace-list"></ol>
+    <section id="features" class="landing-section">
+      <h2>Built to be checked, not guessed</h2>
+      <div class="feature-grid">
+        <div class="feature"><h3>Runs offline</h3><p>No API keys, no network calls. Deterministic and reproducible from a fresh clone.</p></div>
+        <div class="feature"><h3>Trace-first</h3><p>Every step is recorded and shown — you see what the agent did, not just what it concluded.</p></div>
+        <div class="feature"><h3>Real numbers</h3><p>Burn rate, runway, and anomaly cost impact computed from the data, with formulas in the source.</p></div>
+      </div>
     </section>
 
-    <section class="card" id="ask-card" hidden>
-      <h2>Ask about your finances</h2>
-      <form id="ask-form">
-        <input id="ask-input" type="text" placeholder="e.g. What is my burn rate?" />
-        <button type="submit">Ask</button>
+    <footer class="footer">
+      <span>RunwayRadar · synthetic data · agentic finance track</span>
+    </footer>
+  </div>
+
+  <!-- ============ SIGN IN VIEW ============ -->
+  <div id="view-signin" class="view auth-view" hidden>
+    <div class="auth-card">
+      <div class="nav-brand auth-brand">
+        <span class="brand-mark"></span>
+        <span class="brand-name">RunwayRadar</span>
+      </div>
+      <h2>Welcome back</h2>
+      <p class="section-sub">Sign in — any email works. No account, no password stored.</p>
+      <form id="signin-form" class="auth-form">
+        <label for="signin-email">Work email</label>
+        <input id="signin-email" type="email" placeholder="you@company.com" autocomplete="email" required />
+        <label for="signin-password">Password</label>
+        <input id="signin-password" type="password" placeholder="••••••••" required />
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Continue</button>
       </form>
-      <pre id="ask-answer"></pre>
-    </section>
-  </main>
+      <button id="back-to-landing" class="btn btn-ghost btn-block">← Back to site</button>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD VIEW ============ -->
+  <div id="view-dashboard" class="view" hidden>
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="brand-mark"></span>
+        <span class="brand-name">RunwayRadar</span>
+      </div>
+      <div class="nav-links">
+        <span class="nav-company">Acme Studio</span>
+        <button id="signout" class="btn btn-ghost">Sign out</button>
+      </div>
+    </nav>
+
+    <main class="dashboard">
+      <div class="dash-head">
+        <div>
+          <h1>Good morning, founder.</h1>
+          <p class="dash-sub" id="dash-sub">Here's what your money did last month.</p>
+        </div>
+        <div class="dash-actions">
+          <span class="source-chip" id="source-chip">sample data</span>
+          <button id="reset-button" class="btn btn-ghost" hidden>Reset to sample</button>
+          <button id="upload-button" class="btn btn-ghost">Upload CSV</button>
+          <input id="file-input" type="file" accept=".csv,text/csv" hidden />
+          <button id="run-button" class="btn btn-primary">
+            <span class="btn-label">Run the agent</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="loading" class="loading" hidden>
+        <span class="spinner"></span>
+        <span id="loading-text">Reading transactions…</span>
+      </div>
+
+      <!-- KPI row -->
+      <div class="kpi-row">
+        <div class="kpi" id="kpi-burn">
+          <span class="kpi-label">Monthly burn</span>
+          <span class="kpi-value" id="kpi-burn-value">—</span>
+          <span class="kpi-sub" id="kpi-burn-sub"></span>
+        </div>
+        <div class="kpi" id="kpi-runway">
+          <span class="kpi-label">Runway</span>
+          <span class="kpi-value" id="kpi-runway-value">—</span>
+          <span class="kpi-sub" id="kpi-runway-sub"></span>
+        </div>
+        <div class="kpi" id="kpi-cash">
+          <span class="kpi-label">Cash on hand</span>
+          <span class="kpi-value" id="kpi-cash-value">—</span>
+          <span class="kpi-sub" id="kpi-cash-sub"></span>
+        </div>
+        <div class="kpi kpi-warn" id="kpi-impact">
+          <span class="kpi-label">Anomaly cost / mo</span>
+          <span class="kpi-value" id="kpi-impact-value">—</span>
+          <span class="kpi-sub" id="kpi-impact-sub"></span>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="dash-grid">
+        <div class="panel">
+          <div class="panel-head"><h2>Burn rate</h2><span class="panel-note">monthly spend</span></div>
+          <svg id="chart-burn" viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Monthly burn chart"></svg>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>Spend by category</h2><span class="panel-note">all-time</span></div>
+          <div class="donut-wrap">
+            <svg id="chart-donut" viewBox="0 0 200 200" role="img" aria-label="Spend by category donut"></svg>
+            <div class="donut-center"><span id="donut-total">—</span><span class="donut-label">total spend</span></div>
+          </div>
+          <ul class="legend" id="donut-legend"></ul>
+        </div>
+      </div>
+
+      <!-- Flags -->
+      <div class="panel">
+        <div class="panel-head"><h2>Flagged for action</h2><span class="panel-note" id="flags-count"></span></div>
+        <ol class="flag-list" id="flag-list"></ol>
+      </div>
+
+      <!-- Anomalies -->
+      <div class="panel">
+        <div class="panel-head"><h2>Anomalies found</h2><span class="panel-note" id="anomalies-count"></span></div>
+        <ul class="anomaly-list" id="anomaly-list"></ul>
+      </div>
+
+      <!-- Trace -->
+      <div class="panel">
+        <div class="panel-head"><h2>Agent trace</h2><span class="panel-note">what it did, step by step</span></div>
+        <ol class="trace-list" id="trace-list"></ol>
+      </div>
+
+      <!-- Ask -->
+      <div class="panel">
+        <div class="panel-head"><h2>Ask about your finances</h2><span class="panel-note">re-runs the loop</span></div>
+        <form id="ask-form" class="ask-form">
+          <input id="ask-input" type="text" placeholder="e.g. What is my burn rate?" autocomplete="off" />
+          <button type="submit" class="btn btn-primary">Ask</button>
+        </form>
+        <div class="chips" id="ask-chips">
+          <button type="button" class="chip" data-q="What is my burn rate?">Burn rate</button>
+          <button type="button" class="chip" data-q="How much runway do I have?">Runway</button>
+          <button type="button" class="chip" data-q="What are my top issues?">Top issues</button>
+          <button type="button" class="chip" data-q="Why is Notion flagged?">Why Notion?</button>
+        </div>
+        <div class="answer" id="ask-answer" hidden>
+          <div class="answer-stages" id="ask-stages"></div>
+          <pre id="ask-answer-text"></pre>
+        </div>
+      </div>
+    </main>
+  </div>
 
   <script src="/static/app.js"></script>
 </body>
