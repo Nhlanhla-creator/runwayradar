@@ -9,6 +9,11 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
+from .stages.calculate import calculate_metrics
+from .stages.detect import detect_anomalies
+from .stages.flag import flag_for_action
+from .stages.investigate import investigate_candidates
+from .stages.recommend import generate_recommendations
 from .trace import Trace
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -38,10 +43,19 @@ def run_pipeline() -> dict:
     except FileNotFoundError as exc:
         return {"ok": False, "error": str(exc), "trace": trace.to_list()}
 
-    # Stages 2+ are stubbed until later build steps.
+    anomalies = detect_anomalies(trace, rows)
+    investigated = investigate_candidates(trace, rows, anomalies)
+    metrics = calculate_metrics(trace, rows, investigated)
+    recommendations = generate_recommendations(trace, investigated)
+    flagged = flag_for_action(trace, recommendations)
+
     result = {
         "ok": True,
         "row_count": len(rows),
+        "anomalies": investigated,
+        "metrics": metrics,
+        "recommendations": recommendations,
+        "flagged": flagged,
         "trace": trace.to_list(),
     }
     return result
