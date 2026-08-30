@@ -15,3 +15,6 @@ data/ground_truth.json
 Thumbs.db
 .idea/
 .vscode/
+
+# local scratch
+.commitmsg
